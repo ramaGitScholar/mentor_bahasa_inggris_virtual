@@ -25,3 +25,8 @@ class LearningReportSchema(BaseModel): # laporan belajar
     global_score: int = Field(..., description="nilai keseluruhan")
     skill_types: list[LearningSkillTypesSchema] # list of LearningSkillTypesSchema
     markdown_content: str = Field(..., description="seluruh isi laporan  dalam format markdown")
+    
+class EvaluateSpeakingSchema(BaseModel):
+    correction: str = Field(..., description="catatan perbaikan pengucapan bahasa inggris untuk peserta"),
+    score: str = Field(..., description="rentang nilai dari 1 - 10 untuk pengucapan bahasa inggris dari peserta"),
+    summary: str = Field(..., description="gabungan antar correction dan score")

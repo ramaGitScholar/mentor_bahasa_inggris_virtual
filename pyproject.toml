@@ -10,6 +10,7 @@ requires-python = ">=3.10"
 dependencies = [
     "google-genai>=2.20.0",
     "loguru>=0.7.3",
+    "markdown-pdf>=1.13.3",
     "pydantic>=2.13.4",
     "python-dotenv>=1.2.3",
     "supabase>=2.31.0",
