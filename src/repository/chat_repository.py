@@ -19,7 +19,7 @@ class ChatRepository:
             self.supabase.table("chat_histories")
             .select("role", "message_text")
             .eq("user_id", user_id)
-            .order("created_at", desc=True)
+            .order("created_at", desc=False)
             .execute()
         )
         
@@ -41,7 +41,7 @@ class ChatRepository:
                 "user_id": user_id,
                 "username": username,
                 "chat_id": chat_id
-            })
+            }).execute()
         )
         
         return result

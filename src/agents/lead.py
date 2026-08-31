@@ -45,11 +45,11 @@ class LeadAgent:
             for row in response.data
         ]
         
-    def handle_send_message(self, user_id: int, messsage_text: str):
+    def handle_send_message(self, user_id: int, message_text: str):
         self.chat_repository.save_message(
             user_id=user_id,
             role="user",
-            message_text=messsage_text
+            message_text=message_text
         )
         
         contents = self._load_history(user_id = user_id)
@@ -58,7 +58,7 @@ class LeadAgent:
         
         artifacts.start()
         
-        response = self.gemini_client.models.generate_contents(model=env.GEMINI_MODEL, config=types.GenerateContentConfig(
+        response = self.gemini_client.models.generate_content(model=env.GEMINI_MODEL, config=types.GenerateContentConfig(
             system_instruction=self.lead_agent_instruction, tools=self.tools
         ), contents=contents)
         

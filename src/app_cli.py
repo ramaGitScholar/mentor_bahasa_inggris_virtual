@@ -19,6 +19,6 @@ def run():
         if prompt.lower() == "/exit":
             break
         
-        response = lead_agent.handle_send_message(user_id="", message_text=prompt)
+        response = lead_agent.handle_send_message(user_id=101011, message_text=prompt)
         
-        logger.success(f"[AI]: {response.text}")
+        logger.success(f"[AI]: {response['text']}")

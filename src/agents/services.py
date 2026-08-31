@@ -23,7 +23,6 @@ from src.core.schemas import (
 )
 
 gemini_client = llm.get_gemini_client()
-timestamp = datetime.now().strftime("%Y%m%d-%H%M%S-%f")
 
 def generate_exercise(
     text: str,
@@ -83,7 +82,7 @@ def _listening_generate_script(text):
     
     return data
 
-def _listening_generate_audio_script(generate_script= ListeningExerciseSchema):
+def _listening_generate_audio_script(generate_script: ListeningExerciseSchema):
     model = env.GEMINI_MODEL_TTS
     script = generate_script.script
     speaker_one = generate_script.speaker_one
@@ -144,7 +143,7 @@ def _write_wav_file(
     
 
 def listening_exercise(text: str):
-    
+    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S-%f")
     env.OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     
     audio_output_path = env.OUTPUT_DIR / f"listening-{timestamp}.wav"
@@ -168,8 +167,8 @@ def listening_exercise(text: str):
     question_text = "\n".join(f"- {question}" for question in generate_script.questions)
     
     return(
-        "Audio latihan listening suda berasil dibuat dan terlampir otomatis"
-        f"pertanyaan {question_text}"
+        "Audio latihan listening suda berasil dibuat dan terlampir otomatis\n"
+        f"pertanyaan:\n {question_text}"
     )
 
 def reading_exercise(text: str):
@@ -201,7 +200,7 @@ def skill_type_classification(
         config=types.GenerateContentConfig(
             system_instruction=system_instruction,
             response_json_schema=EvaluateUserIntentionSchema.model_json_schema(),
-            temp=0.3
+            temperature=0.3
         )
     )
     
@@ -263,7 +262,7 @@ def evaluate_speaking(voice_file_path: str):
             prompt
         ],
         config = types.GenerateContentConfig(
-            system_instruction=system_instruction, response_json_schema=EvaluateSpeakingSchema.model_json_Schema(),
+            system_instruction=system_instruction, response_json_schema=EvaluateSpeakingSchema.model_json_schema(),
             temperature = 0.3
         )
     )
@@ -279,7 +278,8 @@ def generate_report(
     end_date: str
 ):
     """Membuat laporan belajar bahasa inggris dalam rentang waktu tertentu"""
-    
+    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S-%f")
+      
     model = env.GEMINI_MODEL
     system_instruction = prompts.load_instruction("agent-report")
     prompt = f"Buatkan laporan belajar bahasa inggris atas nama {username} dari tanggal {start_date} sampai {end_date} dengan menganalisis riwayat latihan berikut ini: \n{conversation_history}"

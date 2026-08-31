@@ -3,9 +3,9 @@ from typing import Literal
 
 class ListeningExerciseSchema(BaseModel):
     # description berfungsi sebagai informasi bagi model AI untuk tahu apa yang perlu diinput oleh si model
-    speaker_one: str = Field(..., description="Nama pembicara pertama, misalnya: 'Joe'"),
-    speaker_two: str = Field(..., description="Nama pembicara kedua, misalnya: 'Jane'"),
-    script: str = Field(..., description="Dialog yang dibacakan oleh TTS (Text-to-speech), format: 'Joe:...\\nJane:..' bergantian"),
+    speaker_one: str = Field(..., description="Nama pembicara pertama, misalnya: 'Joe'")
+    speaker_two: str = Field(..., description="Nama pembicara kedua, misalnya: 'Jane'")
+    script: str = Field(..., description="Dialog yang dibacakan oleh TTS (Text-to-speech), format: 'Joe:...\\nJane:..' bergantian")
     questions: list[str] = Field(..., description="Daftar pertanyaan untuk menguji pemahaman peserta berdasarkan 'script'")    
     
 class EvaluateUserIntentionSchema(BaseModel):
@@ -27,6 +27,6 @@ class LearningReportSchema(BaseModel): # laporan belajar
     markdown_content: str = Field(..., description="seluruh isi laporan  dalam format markdown")
     
 class EvaluateSpeakingSchema(BaseModel):
-    correction: str = Field(..., description="catatan perbaikan pengucapan bahasa inggris untuk peserta"),
-    score: str = Field(..., description="rentang nilai dari 1 - 10 untuk pengucapan bahasa inggris dari peserta"),
+    correction: str = Field(..., description="catatan perbaikan pengucapan bahasa inggris untuk peserta")
+    score: str = Field(..., description="rentang nilai dari 1 - 10 untuk pengucapan bahasa inggris dari peserta")
     summary: str = Field(..., description="gabungan antar correction dan score")
