@@ -79,9 +79,7 @@ class LeadAgent:
             message_text = answer
         )
         
-        collected_artifacts = self.chat_repository.get_last_artifact_by_user_id(user_id=user_id)
-        
-        return {"text": answer, "artifacts": collected_artifacts}
+        return {"text": answer, "artifacts": artifacts_data}
     
     def handle_send_voice(self, user_id: int, voice_file_path: str):
         self.chat_repository.save_message(

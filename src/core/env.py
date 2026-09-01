@@ -10,6 +10,7 @@ SRC_DIR = Path(__file__).resolve().parent.parent # ../src
 INSTRUCTIONS_DIR = SRC_DIR / "agents" / "instructions"
 DOCS_DIR = SRC_DIR / "docs"
 OUTPUT_DIR = SRC_DIR / "output"
+TEMP = SRC_DIR / "temp"
 
 
 
@@ -31,3 +32,4 @@ GEMINI_MODEL_TTS = _required_env("GEMINI_MODEL_TTS")
 
 SUPABASE_URL = _required_env("SUPABASE_URL")
 SUPABASE_KEY = _required_env("SUPABASE_KEY")
+TELEGRAM_BOT_TOKEN = _required_env("TELEGRAM_BOT_TOKEN")
