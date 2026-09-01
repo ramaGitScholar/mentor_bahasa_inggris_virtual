@@ -6,7 +6,7 @@ import random
 from zoneinfo import ZoneInfo # WIB - Asia/Jakarta
 
 from telegram import Update
-from telegram.error import BadRequest
+from google.genai.errors import ClientError
 from telegram.ext import (
     ContextTypes,
     Application,
@@ -109,11 +109,20 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     user_id = update.message.from_user.id
     user_message = update.message.text
-    
-    response = lead_agent.handle_send_message(user_id=user_id, message_text=user_message)
-    
+
+    try:
+        response = lead_agent.handle_send_message(user_id=user_id, message_text=user_message)
+    except ClientError as error:
+        if getattr(error, "code", None) == 429:
+            await reply_text.edit_text(to_telegram_markdown(
+                "Mentor sedang sibuk karena kuota permintaan ke layanan AI sudah penuh. "
+                "Coba lagi beberapa saat lagi ya."
+            ))
+            return
+        raise
+
     safe_text = to_telegram_markdown(response["text"])
-    
+
     await reply_text.edit_text(safe_text)
     
     if response["artifacts"]:
@@ -159,9 +168,24 @@ async def task_reminder(context: ContextTypes.DEFAULT_TYPE):
     
 async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     logger.error(f"Error: {context.error}")
-    
-    if update.effective_message:
-        await update.effective_message.reply_text(f"Terjadi error: {context.error}")
+
+    if not isinstance(update, Update) or not update.effective_message:
+        return
+
+    error = context.error
+
+    if isinstance(error, ClientError) and getattr(error, "code", None) == 429:
+        user_message = (
+            "Mentor sedang sibuk karena kuota permintaan ke layanan AI sudah penuh. "
+            "Coba lagi beberapa saat lagi ya."
+        )
+    else:
+        user_message = "Maaf, terjadi kesalahan di sisi mentor. Coba kirim ulang pesanmu ya."
+
+    try:
+        await update.effective_message.reply_text(to_telegram_markdown(user_message))
+    except Exception as send_error:  # jangan sampai error handler ikut crash
+        logger.error(f"Gagal mengirim pesan error ke user: {send_error}")
     
 def run():
     app = Application.builder().token(env.TELEGRAM_BOT_TOKEN).defaults(bot_config).build()
